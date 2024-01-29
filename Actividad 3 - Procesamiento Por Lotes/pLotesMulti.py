@@ -1,6 +1,6 @@
 #Diego León Govea Ortiz
 
-import threading
+import threading 
 import time
 import datetime
 from tkinter import *
