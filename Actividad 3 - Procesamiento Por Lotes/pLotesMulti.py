@@ -1,27 +1,31 @@
 #Diego León Govea Ortiz
+#Programación en Lotes y Multiprogramación
+#Act 3
+#SSP DE SISTEMAS OPERATIVOS
 
-import threading 
+import threading
 import time
 import datetime
 from tkinter import *
 from tkinter import ttk
 
 window = Tk()
-window.title('Multiprocess and lote')
+window.title('MULTIPROCESO Y POR LOTES')
 window.geometry("600x400")
 
 
-def lotes():
+def lotes(): #Aqui se ejecuta el programa cuando es por lotes
     valor = NoProcesos.get()
     num = int(valor)
     print(num)
+    #En estos If verifica que numero de procesos se ingreso en la caja de texto.
     if num>=1:
         for x in range(50):
             if my_Proceso['value'] <= 98:
                 my_Proceso['value'] += 4
                 ProcesoP.config(text=my_Proceso['value'])
                 window.update_idletasks()
-                time.sleep(0.01)
+                time.sleep(0.01) #tiempo que tardará en ejecutarse el proceso
     if num>=2:
         for x in range(50):
             if my_Proceso1['value'] <= 98:
@@ -60,10 +64,11 @@ def lotes():
 
 
 
-def multi():
+def multi(): #Aqui se ejecutan los multiprocesos
     valor=NoProcesos.get()
     num=int(valor)
     print(num)
+    #los if indican hasta donde se dejará de ejecutar dependiendo de los procesos seleccionados
     if num>=1:
         t1.start()
     if num>=2:
@@ -78,14 +83,14 @@ def multi():
         t6.start()
 
 
-
+#Aqui definimos los procesos como el por lotes, pero de forma individual
 def proceso():
     for x in range(100):
         if my_Proceso['value'] <= 99:
             my_Proceso['value'] += x
             ProcesoP.config(text=my_Proceso['value'])
             window.update_idletasks()
-            time.sleep(0.02)
+            time.sleep(0.02)#tiempo que tardará en ejecutarse el proceso
     return
 def proceso1():
     for x in range(100):
@@ -93,7 +98,7 @@ def proceso1():
             my_Proceso1['value'] += x
             ProcesoP1.config(text=my_Proceso1['value'])
             window.update_idletasks()
-            time.sleep(0.02)
+            time.sleep(0.02)#tiempo que tardará en ejecutarse el proceso
     return
 def proceso2():
     for x in range(100):
@@ -101,7 +106,7 @@ def proceso2():
             my_Proceso2['value'] += x
             ProcesoP2.config(text=my_Proceso2['value'])
             window.update_idletasks()
-            time.sleep(0.02)
+            time.sleep(0.02)#tiempo que tardará en ejecutarse el proceso
     return
 def proceso3():
     for x in range(100):
@@ -109,7 +114,7 @@ def proceso3():
             my_Proceso3['value'] += x
             ProcesoP3.config(text=my_Proceso3['value'])
             window.update_idletasks()
-            time.sleep(0.2)
+            time.sleep(0.2)#tiempo que tardará en ejecutarse el proceso
     return
 def proceso4():
     for x in range(100):
@@ -117,7 +122,7 @@ def proceso4():
             my_Proceso4['value'] += x
             ProcesoP4.config(text=my_Proceso4['value'])
             window.update_idletasks()
-            time.sleep(0.05)
+            time.sleep(0.05)#tiempo que tardará en ejecutarse el proceso
     return
 def proceso5():
     for x in range(100):
@@ -125,12 +130,12 @@ def proceso5():
             my_Proceso5['value'] += x
             ProcesoP5.config(text=my_Proceso5['value'])
             window.update_idletasks()
-            time.sleep(0.1)
+            time.sleep(0.1)#tiempo que tardará en ejecutarse el proceso
     return
 
 
 
-def stop():
+def stop():#Aqui se reinicia la barra de proceso de todos los procesos
     my_Proceso.stop()
     ProcesoP.config(text="")
     my_Proceso1.stop()
