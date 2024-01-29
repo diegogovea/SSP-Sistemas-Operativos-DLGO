@@ -11,62 +11,63 @@ window.geometry("600x400")
 
 def lotes():
     for x in range(50):
-        if my_prSong['value'] <= 98:
-            my_prSong['value'] += 4
-            PorcentAudio.config(text=my_prSong['value'])
+        if my_Proceso['value'] <= 98:
+            my_Proceso['value'] += 4
+            ProcesoP.config(text=my_Proceso['value'])
             window.update_idletasks()
             time.sleep(0.01)
 
 
+
 def multi():
-    t3.start()
+    t1.start()
 
 
-def song():
+
+def proceso():
     for x in range(100):
-        if my_prSong['value'] <= 99:
-            my_prSong['value'] += x
-            PorcentAudio.config(text=my_prSong['value'])
+        if my_Proceso['value'] <= 99:
+            my_Proceso['value'] += x
+            ProcesoP.config(text=my_Proceso['value'])
             window.update_idletasks()
             time.sleep(0.02)
     return
 
 
-def stop():
-    my_prSong.stop()
-    PorcentAudio.config(text="")
 
+def stop():
+    my_Proceso.stop()
+    ProcesoP.config(text="")
 
 lbSpace = Label(window, text=" ")
 lbSpace.pack(pady=20)
 
 #creacion de hilos
 tiempo=datetime.datetime.now()
+t1=threading.Thread(name="hilo_1", target=proceso)
 
-t3=threading.Thread(name="hilo_3", target=song)
 
 # Contenedor para las barras de progreso
 progress_frame = Frame(window)
 progress_frame.pack()
 
-# AUDIO
-lbCancion = Label(progress_frame, text="Deleting song")
-lbCancion.pack(pady=5)
-my_prSong = ttk.Progressbar(progress_frame, orient=HORIZONTAL, length=300, mode='determinate')
-my_prSong.pack()
-
-PorcentAudio = Label(progress_frame, text=" ")
-PorcentAudio.pack(pady=10)
+# Proceso
+lbProceso = Label(progress_frame, text="Proceso")
+lbProceso.pack(pady=5)
+my_Proceso = ttk.Progressbar(progress_frame, orient=HORIZONTAL, length=300, mode='determinate')
+my_Proceso.pack()
+ProcesoP = Label(progress_frame, text=" ")
+ProcesoP.pack(pady=10)
 
 # Contenedor para los botones
 button_frame = Frame(window)
 button_frame.pack()
 
 # BOTONES PARA EJECUTAR PROCESOS
-my_button = Button(button_frame, text="RESET", command=stop)
-my_button.pack(side=LEFT, padx=20)
-multibtn = Button(button_frame, text="MULTIPROCES", command=multi)
-multibtn.pack(side=LEFT, padx=5)
+my_button = Button(button_frame, text="RESETEO", command=stop)
+my_button.pack(side=LEFT, padx=10)
+multibtn = Button(button_frame, text="MULTIPROCESO", command=multi)
+multibtn.pack(side=LEFT, padx=10)
 lotesbtn = Button(button_frame, text="LOTES", command=lotes)
 lotesbtn.pack(side=LEFT, padx=5)
 
