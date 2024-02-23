@@ -1,3 +1,5 @@
 # ADMINISTRADOR DE PROCESOS
 
-La teoría de fases de un proceso de Tanenbaum es una forma de modelar y entender el comportamiento de un proceso en un sistema operativo. Según esta teoría, un proceso se divide en diferentes fases, y cada fase se caracteriza por el tipo de actividad que realiza el proceso en ese momento.
+
+Este es un tema que nos lleva a analizar que clase de sistemas son los que utilizan estas
+terminologías, y nos remontamos a pensar en los sistemas distribuidos.
