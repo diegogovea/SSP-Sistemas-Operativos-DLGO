@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
-import time
 import threading
+import time
+from queue import Queue
 
 class Proceso:
     def __init__(self, nombre, duracion):
@@ -22,6 +23,8 @@ class SimuladorFCFS:
         ]
 
         self.barras_progreso = []
+        self.resultados_queue = Queue()  # Queue para recibir resultados de hilos
+
         self.inicializar_interfaz()
 
     def inicializar_interfaz(self):
@@ -38,8 +41,16 @@ class SimuladorFCFS:
     def ejecutar_proceso(self, proceso, etiqueta, barra):
         for i in range(proceso.duracion):
             time.sleep(1)
-            barra['value'] += 1
+            self.resultados_queue.put((barra, i + 1))  # Coloca resultados en la cola
+
+    def actualizar_interfaz(self):
+        while not self.resultados_queue.empty():
+            barra, valor = self.resultados_queue.get()
+            barra['value'] = valor
             self.ventana.update_idletasks()
+
+        if any(barra['value'] < barra['maximum'] for _, barra in self.barras_progreso):
+            self.ventana.after(100, self.actualizar_interfaz)  # Llama a la función nuevamente después de 100 ms
 
     def iniciar_simulacion(self):
         self.boton_inicio.config(state=tk.DISABLED)
@@ -50,6 +61,8 @@ class SimuladorFCFS:
 
             thread = threading.Thread(target=self.ejecutar_proceso, args=(proceso, etiqueta, barra))
             thread.start()
+
+        self.actualizar_interfaz()  # Inicia la actualización de la interfaz
 
 if __name__ == "__main__":
     ventana = tk.Tk()
