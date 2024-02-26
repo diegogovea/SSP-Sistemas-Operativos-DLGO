@@ -10,7 +10,7 @@ class RoundRobinSimulator:
         self.root.title("Round Robin Simulator")
 
         self.num_processes = 10
-        self.processes = [{"id": i+1, "progress": 0, "quantum": random.randint(1, 5)} for i in range(self.num_processes)]
+        self.processes = [{"id": i+1, "progress": 0, "quantum": random.randint(1, 5), "paused": False} for i in range(self.num_processes)]
         # Asignar quantums aleatorios entre 1 y 5 segundos
         self.processes.sort(key=lambda x: x["quantum"])  # Ordenar por tiempo de quantum
 
@@ -18,10 +18,10 @@ class RoundRobinSimulator:
 
     def create_widgets(self):
         self.progress_bars = []
-        self.quantum_labels = []  # Lista para almacenar las etiquetas del quantum
-        self.pause_buttons = []  # Lista para almacenar los botones de pausa
-        self.resume_buttons = []  # Lista para almacenar los botones de reanudar
-        self.cancel_buttons = []  # Lista para almacenar los botones de cancelar
+        self.quantum_labels = []
+        self.pause_buttons = []
+        self.resume_buttons = []
+        self.cancel_buttons = []
 
         for i in range(self.num_processes):
             progress_label = tk.Label(self.root, text=f"Proceso {i+1}:")
@@ -48,7 +48,7 @@ class RoundRobinSimulator:
             self.cancel_buttons.append(cancel_button)
 
         start_button = tk.Button(self.root, text="Start", command=self.start_simulation)
-        start_button.grid(row=self.num_processes, column=0, columnspan=4, pady=10)
+        start_button.grid(row=self.num_processes, column=0, columnspan=6, pady=10)
 
     def start_simulation(self):
         thread = threading.Thread(target=self.simulation_thread)
@@ -57,18 +57,29 @@ class RoundRobinSimulator:
     def simulation_thread(self):
         for current_process_data in self.processes:
             while current_process_data["progress"] < 100:
-                current_process_data["progress"] += min(current_process_data["quantum"], 100 - current_process_data["progress"])
-                self.update_progress_bars()
-                time.sleep(0.01)  # Simula un pequeño retraso entre actualizaciones
+                if current_process_data["paused"]:
+                    time.sleep(1)  # Esperar si el proceso está pausado
+                else:
+                    current_process_data["progress"] += min(current_process_data["quantum"], 100 - current_process_data["progress"])
+                    self.update_progress_bars()
+                    time.sleep(0.01)  # Simula un pequeño retraso entre actualizaciones
 
     def pause_process(self, process_index):
-        # Puedes implementar la lógica de pausar aquí
+        self.processes[process_index]["paused"] = True
         print(f"Proceso {process_index + 1} pausado")
+
+    def resume_process(self, process_index):
+        self.processes[process_index]["paused"] = False
+        print(f"Proceso {process_index + 1} reanudado")
+
+    def cancel_process(self, process_index):
+        # Puedes implementar la lógica de cancelar aquí
+        print(f"Proceso {process_index + 1} cancelado")
 
     def update_progress_bars(self):
         for i, progress_bar in enumerate(self.progress_bars):
             progress_bar["value"] = self.processes[i]["progress"]
-            self.quantum_labels[i]["text"] = f"Quantum: {self.processes[i]['quantum']}s"  # Actualiza la etiqueta del quantum
+            self.quantum_labels[i]["text"] = f"Quantum: {self.processes[i]['quantum']}s"
             self.root.update()
 
 
