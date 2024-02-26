@@ -19,6 +19,9 @@ class RoundRobinSimulator:
     def create_widgets(self):
         self.progress_bars = []
         self.quantum_labels = []  # Lista para almacenar las etiquetas del quantum
+        self.pause_buttons = []  # Lista para almacenar los botones de pausa
+        self.resume_buttons = []  # Lista para almacenar los botones de reanudar
+        self.cancel_buttons = []  # Lista para almacenar los botones de cancelar
 
         for i in range(self.num_processes):
             progress_label = tk.Label(self.root, text=f"Proceso {i+1}:")
@@ -32,8 +35,20 @@ class RoundRobinSimulator:
             quantum_label.grid(row=i, column=2, padx=10, pady=5, sticky=tk.W)
             self.quantum_labels.append(quantum_label)
 
+            pause_button = tk.Button(self.root, text="Pausar", command=lambda i=i: self.pause_process(i))
+            pause_button.grid(row=i, column=3, padx=10, pady=5, sticky=tk.W)
+            self.pause_buttons.append(pause_button)
+
+            resume_button = tk.Button(self.root, text="Reanudar", command=lambda i=i: self.resume_process(i))
+            resume_button.grid(row=i, column=4, padx=10, pady=5, sticky=tk.W)
+            self.resume_buttons.append(resume_button)
+
+            cancel_button = tk.Button(self.root, text="Cancelar", command=lambda i=i: self.cancel_process(i))
+            cancel_button.grid(row=i, column=5, padx=10, pady=5, sticky=tk.W)
+            self.cancel_buttons.append(cancel_button)
+
         start_button = tk.Button(self.root, text="Start", command=self.start_simulation)
-        start_button.grid(row=self.num_processes, column=0, columnspan=3, pady=10)
+        start_button.grid(row=self.num_processes, column=0, columnspan=4, pady=10)
 
     def start_simulation(self):
         thread = threading.Thread(target=self.simulation_thread)
@@ -45,6 +60,10 @@ class RoundRobinSimulator:
                 current_process_data["progress"] += min(current_process_data["quantum"], 100 - current_process_data["progress"])
                 self.update_progress_bars()
                 time.sleep(0.01)  # Simula un pequeño retraso entre actualizaciones
+
+    def pause_process(self, process_index):
+        # Puedes implementar la lógica de pausar aquí
+        print(f"Proceso {process_index + 1} pausado")
 
     def update_progress_bars(self):
         for i, progress_bar in enumerate(self.progress_bars):
