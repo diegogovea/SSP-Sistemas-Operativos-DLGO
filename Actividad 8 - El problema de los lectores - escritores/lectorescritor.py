@@ -17,7 +17,8 @@ class ProductorConsumidor(tk.Tk):
                          'ESCRITOR A', 'ESCRITOR B', 'ESCRITOR C', 'ESCRITOR D', 'ESCRITOR E']
         self.barras = {}
         self.estados = {}
-        self.botones = {}
+        self.botones_pausar = {}
+        self.botones_reanudar = {}
         self.pausado = {}
         self.cola = tk.StringVar()
         self.ejecutando = tk.StringVar()
@@ -38,13 +39,18 @@ class ProductorConsumidor(tk.Tk):
             estado_label = tk.Label(frame, text="En cola", bg='light grey')
             estado_label.grid(row=0, column=2)
 
-            boton = tk.Button(frame, text="Pausar/Reanudar",
-                              command=lambda proceso=proceso: self.pausar_reanudar(proceso), bg='sky blue')
-            boton.grid(row=0, column=3)
+            boton_pausar = tk.Button(frame, text="Pausar",
+                                     command=lambda proceso=proceso: self.pausar(proceso), bg='sky blue')
+            boton_pausar.grid(row=0, column=3)
+
+            boton_reanudar = tk.Button(frame, text="Reanudar",
+                                       command=lambda proceso=proceso: self.reanudar(proceso), bg='light green')
+            boton_reanudar.grid(row=0, column=4)
 
             self.barras[proceso] = barra
             self.estados[proceso] = estado_label
-            self.botones[proceso] = boton
+            self.botones_pausar[proceso] = boton_pausar
+            self.botones_reanudar[proceso] = boton_reanudar
             self.pausado[proceso] = False
 
         tk.Label(self, text="Estados", font=("Times New Roman", 14), bg='light grey').pack()
@@ -111,8 +117,12 @@ class ProductorConsumidor(tk.Tk):
             hilo = threading.Thread(target=self.ejecutar_proceso, args=(proceso,))
             hilo.start()
 
-    def pausar_reanudar(self, proceso):
-        self.pausado[proceso] = not self.pausado[proceso]
+    def pausar(self, proceso):
+        self.pausado[proceso] = True
+        self.actualizar_estados()
+
+    def reanudar(self, proceso):
+        self.pausado[proceso] = False
         self.actualizar_estados()
 
     def actualizar_estados(self):
