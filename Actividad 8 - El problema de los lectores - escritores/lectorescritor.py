@@ -36,16 +36,19 @@ class ProductorConsumidor(tk.Tk):
             barra = ttk.Progressbar(frame, orient="horizontal", length=200, mode="determinate")
             barra.grid(row=0, column=1)
 
+            buffer_label = tk.Label(frame, text="Buffer: ", bg='light grey')
+            buffer_label.grid(row=0, column=2)
+
             estado_label = tk.Label(frame, text="En cola", bg='light grey')
-            estado_label.grid(row=0, column=2)
+            estado_label.grid(row=0, column=3)
 
             boton_pausar = tk.Button(frame, text="Pausar",
                                      command=lambda proceso=proceso: self.pausar(proceso), bg='sky blue')
-            boton_pausar.grid(row=0, column=3)
+            boton_pausar.grid(row=0, column=4)
 
             boton_reanudar = tk.Button(frame, text="Reanudar",
                                        command=lambda proceso=proceso: self.reanudar(proceso), bg='light green')
-            boton_reanudar.grid(row=0, column=4)
+            boton_reanudar.grid(row=0, column=5)
 
             self.barras[proceso] = barra
             self.estados[proceso] = estado_label
@@ -126,6 +129,15 @@ class ProductorConsumidor(tk.Tk):
         self.actualizar_estados()
 
     def actualizar_estados(self):
+        for proceso in self.procesos:
+            estado = self.estados[proceso]
+            if estado.cget("text") == "En cola":
+                estado.config(bg='yellow')
+            elif estado.cget("text") == "Ejecutándose":
+                estado.config(bg='red')
+            elif estado.cget("text") == "Terminado":
+                estado.config(bg='green')
+
         en_cola = [proceso for proceso in self.procesos if self.estados[proceso].cget("text") == "En cola"]
         ejecutando = [proceso for proceso in self.procesos if self.estados[proceso].cget("text") == "Ejecutándose"]
         terminado = [proceso for proceso in self.procesos if self.estados[proceso].cget("text") == "Terminado"]
